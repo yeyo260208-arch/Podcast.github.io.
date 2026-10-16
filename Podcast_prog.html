@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080d12">
+  <title>La Chaviza — Podcast</title>
+  <style>
+    :root {
+      --bg: #080d12;
+      --panel: #101820;
+      --panel2: #17232c;
+      --green: #1ed760;
+      --purple: #8b5cf6;
+      --blue: #39a7ff;
+      --text: #f5f7fa;
+      --muted: #aab8c5;
+      --line: rgba(255,255,255,.09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      padding-bottom: 100px;
+    }
+    button { font: inherit; cursor: pointer; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 230px minmax(0,1fr); }
+    aside {
+      background: #05090d; border-right: 1px solid var(--line); padding: 25px 16px;
+      position: sticky; top: 0; height: 100vh;
+    }
+    .brand { display:flex; align-items:center; gap:10px; font-size:20px; font-weight:850; margin:0 8px 36px; }
+    .brand-mark { width:36px; height:36px; display:grid; place-items:center; border-radius:50%; color:#06120b; background:var(--green); font-weight:1000; }
+    .nav-label { color:#82909c; text-transform:uppercase; font-size:11px; letter-spacing:1.4px; margin:24px 10px 10px; }
+    .nav-item { display:block; color:#c8d2db; text-decoration:none; padding:12px 13px; margin:4px 0; border-radius:12px; }
+    .nav-item.active { color:var(--green); background:#14232b; font-weight:700; }
+    main { min-width:0; }
+    header { height:68px; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:0 30px; border-bottom:1px solid var(--line); background:rgba(8,13,18,.88); }
+    .search { width:min(540px,100%); border:1px solid var(--line); border-radius:30px; padding:12px 16px; color:var(--text); background:#17232c; outline:none; }
+    .top-note { color:var(--muted); font-size:13px; }
+    .content { padding:30px; max-width:1500px; margin:auto; }
+    .hero { display:grid; grid-template-columns:250px minmax(0,1fr); gap:28px; align-items:center; position:relative; overflow:hidden; border-radius:24px; padding:26px; background:linear-gradient(115deg,#18234d 0%,#101820 52%,#0a1715 100%); }
+    .cover {
+      aspect-ratio:1; width:100%; border-radius:18px; overflow:hidden; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; text-align:center; padding:15px;
+      background:radial-gradient(circle at 18% 15%,#713bda 0,transparent 33%),radial-gradient(circle at 85% 80%,#147f65 0,transparent 30%),linear-gradient(140deg,#101a43,#090e16 65%);
+      border:1px solid rgba(255,255,255,.18); box-shadow:0 20px 60px #0008;
+    }
+    .cover .mini { font-size:12px; letter-spacing:4px; color:#b7ffdc; font-weight:900; }
+    .cover .logo { font-size:clamp(36px,5vw,57px); line-height:.86; font-weight:1000; letter-spacing:-3px; text-shadow:4px 4px 0 #5125a8; margin:15px 0; }
+    .cover .code { color:var(--green); font-size:36px; font-weight:900; }
+    .cover .sub { color:#d7e3ef; font-size:12px; margin-top:10px; }
+    .eyebrow { color:#b6c4d1; font-size:12px; font-weight:800; letter-spacing:1.8px; text-transform:uppercase; }
+    h1 { font-size:clamp(38px,5.5vw,70px); letter-spacing:-3px; line-height:.98; margin:12px 0; }
+    .tagline { font-size:19px; font-weight:750; margin:0 0 12px; }
+    .description { max-width:650px; line-height:1.6; color:#c0cfdb; margin:0; }
+    .metadata { color:#a9bbc9; font-size:13px; margin-top:18px; }
+    .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+    .btn { border:1px solid #66727d; background:transparent; color:white; padding:12px 22px; border-radius:30px; font-weight:800; }
+    .btn.primary { background:var(--green); color:#06120b; border-color:var(--green); }
+    .layout { display:grid; grid-template-columns:minmax(0,1fr) 310px; gap:26px; margin-top:30px; }
+    h2 { font-size:23px; margin:0 0 16px; }
+    .episodes { display:flex; flex-direction:column; gap:5px; }
+    .episode { display:grid; grid-template-columns:64px 40px minmax(0,1fr) 30px; align-items:center; gap:13px; padding:12px; border-radius:12px; }
+    .episode:hover { background:#142029; }
+    .ep-cover { width:64px; height:64px; border-radius:9px; display:grid; place-items:center; text-align:center; padding:5px; background:linear-gradient(145deg,#263b8b,#12172d 55%,#08765d); border:1px solid #ffffff20; font-size:11px; font-weight:950; }
+    .ep-cover span { color:var(--green); display:block; font-size:20px; }
+    .play-small { width:36px; height:36px; border:0; border-radius:50%; background:var(--green); color:#07110a; font-size:15px; font-weight:900; }
+    .ep-title { font-weight:800; font-size:15px; margin-bottom:5px; }
+    .ep-desc { color:var(--muted); font-size:13px; line-height:1.45; }
+    .ep-meta { color:#9eafbd; font-size:12px; margin-top:7px; }
+    .side-card { background:linear-gradient(160deg,#101b23,#0b1117); border:1px solid var(--line); border-radius:18px; padding:20px; margin-bottom:16px; }
+    .side-card p { color:#c1ced8; line-height:1.55; font-size:14px; }
+    .tags { display:flex; flex-wrap:wrap; gap:7px; }
+    .tag { background:#1b2a35; border-radius:20px; padding:7px 10px; font-size:12px; color:#dce6ee; }
+    .quote { border-color:#145a3a; background:linear-gradient(110deg,#08251a,#111b21); color:#d5ffe4; font-weight:800; }
+    .player { position:fixed; z-index:10; bottom:0; left:0; right:0; min-height:84px; background:#080d12f5; border-top:1px solid #34414b; backdrop-filter:blur(18px); display:grid; grid-template-columns:minmax(150px,1fr) minmax(220px,1.5fr) minmax(100px,1fr); gap:20px; align-items:center; padding:12px 24px; }
+    .now { display:flex; align-items:center; gap:12px; min-width:0; }
+    .now-cover { width:52px; height:52px; flex:none; border-radius:8px; display:grid; place-items:center; color:var(--green); background:linear-gradient(140deg,#263b8b,#0a151b); font-weight:1000; }
+    .now-title { font-size:13px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .now-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+    .controls { text-align:center; }
+    .control-row { display:flex; align-items:center; justify-content:center; gap:18px; }
+    .icon-btn { border:0; color:#d7e0e8; background:transparent; font-size:18px; }
+    .main-play { width:38px; height:38px; border:0; border-radius:50%; background:white; color:#091016; font-weight:900; }
+    .timeline { display:flex; align-items:center; gap:10px; color:#9aa9b5; font-size:10px; margin-top:7px; }
+    inputtype=range] { accent-color:var(--green); width:100%; min-width:0; }
+    .volume { display:flex; align-items:center; gap:10px; justify-content:flex-end; color:#c8d4df; }
+    audio { display:none; }
+    .empty-hint { color:#93a6b5; font-size:12px; line-height:1.5; margin-top:12px; }
+    footer { color:#7f909d; text-align:center; font-size:12px; padding:35px 0 5px; }
+    @media(max-width:1000px) { .layout {grid-template-columns:1fr;} .sidebar {display:grid;grid-template-columns:1fr 1fr;gap:12px;} .side-card {margin:0;} }
+    @media(max-width:700px) {
+      .app {display:block;} aside {display:none;} header {height:58px;padding:0 16px;} .top-note {display:none;}
+      .content {padding:16px;} .hero {grid-template-columns:1fr;gap:20px;padding:18px;} .cover {max-width:230px;margin:auto;}
+      h1 {font-size:46px;} .layout {margin-top:23px;} .sidebar {display:flex;flex-direction:column;}
+      .episode {grid-template-columns:48px 34px minmax(0,1fr);gap:9px;padding:9px 4px;}
+      .ep-cover {width:48px;height:52px;font-size:9px;} .ep-cover span {font-size:17px;} .play-small {width:31px;height:31px;}
+      .ep-title {font-size:13px;} .ep-desc {font-size:12px;} .episode .more {display:none;}
+      .player {grid-template-columns:1fr auto;gap:10px;padding:10px 13px;min-height:78px;}
+      .controls {grid-column:2;grid-row:1;} .control-row {gap:9px;} .control-row .skip {display:none;}
+      .timeline {display:none;} .volume {display:none;} .now-cover {width:43px;height:43px;} .now-title {max-width:145px;}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand"><div class="brand-mark">LC</div><span>La Chaviza</span></div>
+    <a class="nav-item active" href="#inicio">⌂ &nbsp; Inicio</a>
+    <a class="nav-item" href="#episodios">⌕ &nbsp; Episodios</a>
+    <a class="nav-item" href="#acerca">▤ &nbsp; Acerca del podcast</a>
+    <div class="nav-label">Podcast</div>
+    <a class="nav-item active" href="#inicio">♬ &nbsp; La Chaviza</a>
+    <a class="nav-item" href="#episodios">⌘ &nbsp; Programación</a>
+    <div class="empty-hint">Una página independiente inspirada en interfaces de streaming. No es una publicación real de Spotify.</div>
+  </aside>
+  <main>
+    <header>
+      <input id="search" class="search" type="search" placeholder="⌕  Buscar episodios de La Chaviza..." aria-label="Buscar episodios">
+      <div class="top-note">PODCAST ESCOLAR · TECNOLOGÍA</div>
+    </header>
+    <div class="content" id="inicio">
+      <section class="hero">
+        <div class="cover" aria-label="Portada de La Chaviza">
+          <div class="mini">PODCAST ESCOLAR</div>
+          <div class="logo">LA<br>CHAVIZA</div>
+          <div class="code">&lt;/&gt;</div>
+          <div class="sub">CÓDIGO · IDEAS · BUENA VIBRA</div>
+        </div>
+        <div>
+          <div class="eyebrow">Spotify se queda Corto prros </div>
+          <h1>La Chaviza</h1>
+          <p class="tagline">Que Rollo Chavalones Sean Bienevenidos a un nuevo capitulo</p>
+          <p class="description">recuerden que este podcast esta hecho por y para quienes tienen curiosidad por la programación. Hablamos de tecnología, desarrollo web.</p>
+          <div class="metadata"> Podcast escolar &nbsp; · &nbsp; Programación &nbsp; · &nbsp; Audio original</div>
+          <div class="actions">
+            <button class="btn primary" id="heroPlay">▶ Reproducir</button>
+            <button class="btn" id="followBtn">＋ Seguir</button>
+          </div>
+        </div>
+      </section>
+      <section class="layout">
+        <div>
+          <h2 id="episodios">Episodios</h2>
+          <div class="episodes" id="episodeList">
+            <article class="episode" data-title="¿Qué es (POO) en la  programación?" data-desc="Introducción a la programación y cómo empezar desde cero.">
+              <div class="ep-cover">LA <span>&lt;/&gt;</span> CHAVIZA</div>
+              <button class="play-small" aria-label="Reproducir episodio 1" data-play="0">▶</button>
+              <div><div class="ep-title">Episodio 1 — ¿Qué es (POO) en la programación?</div><div class="ep-desc">Una introducción al mundo del código, para qué sirve y cómo empezar desde cero.</div><div class="ep-meta">♫ <span class="duration" data-duration="0">Audio por agregar</span></div></div>
+              <div class="more">•••</div>
+          </div>
+          <p class="empty-hint">LO QUE TU NO SABES LOBO ES QUE YO SIEMPRE ESTUVE AHI .</p>
+        </div>
+        <div class="sidebar">
+          <section class="side-card" id="acerca">
+            <h2>Acerca de</h2>
+            <p>La Chaviza es un podcast escolar sobre programación, tecnología y creatividad. Un espacio para compartir ideas, aprender juntos y demostrar que el código también se aprende conversando.</p>
+            <div class="tags"><span class="tag">Programación</span><span class="tag">Tecnología</span><span class="tag">HTML/CSS</span><span class="tag">JavaScript</span><span class="tag">Python</span></div>
+          </section>
+          <section class="side-card">
+            <h2>Integrantes</h2>
+            <p>👾 <strong>katerin
+            daniela
+            wicha
+            lis
+            yeyo 
+            wichito
+            porto</strong><br><span style="color:var(--muted)">Producción · Guion · Voz</span></p>
+            <p class="empty-hint">creditos a yeyo good.</p>
+          </section>
+          <section class="side-card quote"> &lt;/&gt; &nbsp; Porque el futuro también se programa.</section>
+        </div>
+      </section>
+      <footer>LA CHAVIZA · Proyecto escolar independiente · Inspirado en interfaces de streaming, no afiliado a Spotify.</footer>
+    </div>
+  </main>
+</div>
+
+<div class="player">
+  <div class="now">
+    <div class="now-cover">&lt;/&gt;</div>
+    <div><div class="now-title" id="nowTitle">La Chaviza</div><div class="now-sub" id="nowSub">Selecciona un episodio</div></div>
+  </div>
+  <div class="controls">
+    <div class="control-row">
+      <button class="icon-btn skip" id="prevBtn" aria-label="Anterior">|◀</button>
+      <button class="main-play" id="playPause" aria-label="Reproducir">▶</button>
+      <button class="icon-btn skip" id="nextBtn" aria-label="Siguiente">▶|</button>
+    </div>
+    <div class="timeline"><span id="currentTime">0:00</span><input id="seek" type="range" min="0" max="100" value="0" aria-label="Progreso del audio"><span id="totalTime">0:00</span></div>
+  </div>
+  <div class="volume"><span>🔊</span><input id="volume" type="range" min="0" max="1" step=".01" value=".85" aria-label="Volumen"></div>
+</div>
+
+<!--
+  AUDIO: crea una carpeta llamada "audio" junto a este archivo HTML.
+  Guarda ahí tu audio de WhatsApp como "podcast.mp3".
+  Si el audio está en .m4a, cambia la ruta del código por audio/podcast.m4a.
+-->
+<audio id="audioPlayer" preload="metadata">
+  <source src="audio/Podcast.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  // Para un solo audio, déjalo como está. Puedes añadir otros archivos a la lista.
+  const tracks = [
+    { title: "La Chaviza — Podcast escolar", file: "audio/Podcast.mp3", episode: 0 },
+    { title: "Episodio 2 — JavaScript", file: "audio/episodio2.mp3", episode: 1 },
+    { title: "Episodio 3 — Python", file: "audio/episodio3.mp3", episode: 2 },
+    { title: "Episodio 4 — Desarrollo web", file: "audio/episodio4.mp3", episode: 3 }
+  ];
+  const audio = document.getElementById("audioPlayer");
+  const playPause = document.getElementById("playPause");
+  const heroPlay = document.getElementById("heroPlay");
+  const nowTitle = document.getElementById("nowTitle");
+  const nowSub = document.getElementById("nowSub");
+  const seek = document.getElementById("seek");
+  const currentTime = document.getElementById("currentTime");
+  const totalTime = document.getElementById("totalTime");
+  let current = 0;
+
+  function timeText(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  }
+  function setTrack(index, autoplay = true) {
+    current = (index + tracks.length) % tracks.length;
+    const track = tracks[current];
+    audio.src = track.file;
+    nowTitle.textContent = track.title;
+    nowSub.textContent = `La Chaviza · Episodio ${track.episode + 1}`;
+    document.querySelectorAll(".play-small").forEach((b, i) => b.textContent = i === current ? "Ⅱ" : "▶");
+    audio.load();
+    if (autoplay) audio.play().catch(() => {
+      alert("No se pudo cargar el audio. Revisa que el archivo exista en la carpeta audio y que su nombre coincida con el código.");
+    });
+  }
+  function togglePlay() {
+    if (!audio.src || audio.src === location.href) setTrack(0, true);
+    else if (audio.paused) audio.play().catch(() => alert("Revisa que exista audio/podcast.mp3."));
+    else audio.pause();
+  }
+  playPause.addEventListener("click", togglePlay);
+  heroPlay.addEventListener("click", togglePlay);
+  document.querySelectorAll(".play-small").forEach(button => {
+    button.addEventListener("click", () => setTrack(Number(button.dataset.play), true));
+  });
+  document.getElementById("prevBtn").addEventListener("click", () => setTrack(current - 1, true));
+  document.getElementById("nextBtn").addEventListener("click", () => setTrack(current + 1, true));
+  audio.addEventListener("play", () => { playPause.textContent = "Ⅱ"; heroPlay.textContent = "Ⅱ Reproduciendo"; });
+  audio.addEventListener("pause", () => { playPause.textContent = "▶"; heroPlay.textContent = "▶ Reproducir"; document.querySelectorAll(".play-small").forEach(b => b.textContent = "▶"); });
+  audio.addEventListener("loadedmetadata", () => {
+    totalTime.textContent = timeText(audio.duration);
+    document.querySelectorAll(".duration").forEach(el => el.textContent = timeText(audio.duration));
+  });
+  audio.addEventListener("timeupdate", () => {
+    currentTime.textContent = timeText(audio.currentTime);
+    if (Number.isFinite(audio.duration) && audio.duration > 0) seek.value = audio.currentTime / audio.duration * 100;
+  });
+  audio.addEventListener("ended", () => setTrack(current + 1, false));
+  seek.addEventListener("input", () => {
+    if (Number.isFinite(audio.duration) && audio.duration > 0) audio.currentTime = seek.value / 100 * audio.duration;
+  });
+  document.getElementById("volume").addEventListener("input", e => audio.volume = Number(e.target.value));
+  audio.volume = .85;
+  document.getElementById("followBtn").addEventListener("click", e => {
+    const btn = e.currentTarget;
+    btn.textContent = btn.textContent.includes("Seguir") ? "✓ Siguiendo" : "＋ Seguir";
+  });
+  document.getElementById("search").addEventListener("input", e => {
+    const q = e.target.value.toLowerCase().trim();
+    document.querySelectorAll(".episode").forEach(ep => {
+      ep.style.display = (ep.dataset.title + " " + ep.dataset.desc).toLowerCase().includes(q) ? "grid" : "none";
+    });
+  });
+</script>
+</body>
+</html>
